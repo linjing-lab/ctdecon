@@ -1,6 +1,6 @@
 # Download Datasets
 
-The `data` folder contains DLPFC, Liver, MOB and PDAC.
+The `data` folder contains DLPFC, HLN, Liver, MOB and PDAC.
 
 ## DLPFC
 ```bash
@@ -8,7 +8,7 @@ wget https://zenodo.org/records/11114959/files/DLPFC.zip
 unzip DLPFC.zip
 ```
 ## HLN
-download ST data from https://drive.google.com/drive/folders/1ns-EsWBu-SNrJ39j-q-AFIV5U-aXFwXf.
+download human lymph node data from https://drive.google.com/drive/folders/1ns-EsWBu-SNrJ39j-q-AFIV5U-aXFwXf.
 ```bash
 wget https://cell2location.cog.sanger.ac.uk/paper/integrated_lymphoid_organ_scrna/RegressionNBV4Torch_57covariates_73260cells_10237genes/sc.h5ad
 ```

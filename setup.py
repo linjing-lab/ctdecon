@@ -33,7 +33,7 @@ setup(
       zip_safe=False,
       setup_requires=['setuptools>=18.0', 'wheel'],
       project_urls={
-            'Source': 'https://github.com/linjing-lab/ctdecon/tree/master/ctdecon/',
+            'Source': 'https://github.com/linjing-lab/ctdecon/tree/main/ctdecon/',
             'Tracker': 'https://github.com/linjing-lab/ctdecon/issues',
       },
       classifiers=[
@@ -53,7 +53,7 @@ setup(
             'Topic :: Software Development :: Libraries :: Python Modules',
       ],
       install_requires=[
-            'numpy>=1.26.4',
+            'numpy>=1.26.4', # 'numpy==1.26.4'
             'pandas>=2.3.1',
             'POT>=0.9.5',
             'pykan>=0.2.8',

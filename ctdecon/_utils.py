@@ -1,6 +1,8 @@
 import numpy, torch, pandas, os, random
 from torch.backends import cudnn
 import scipy.sparse as sp
+from scipy.spatial.distance import jensenshannon
+from scipy.stats import pearsonr
 
 def permutation(feature):
     # fix_seed(FLAGS.random_seed) 
@@ -84,7 +86,27 @@ class AvgReadout(torch.nn.Module):
         row_sum = row_sum.expand((vsum.shape[1], row_sum.shape[0])).T
         global_emb = vsum / row_sum 
         return torch.nn.functional.normalize(global_emb, p=2, dim=1)
-    
+
+def cal_eval(adata_sc, pred):
+    cts = numpy.unique(adata_sc.obs.label.values)
+    cts.sort() 
+    cts_dict = dict(zip(range(len(cts)), cts))  #  num2str
+    cts_dict = dict((y,x) for x,y in cts_dict.items())  # str2num
+    ctr_sc = []
+    for ct in cts_dict.keys():
+        idx = numpy.nonzero(adata_sc.obs.label.values==ct)[0]
+        ctr_sc.append(len(idx))
+    ctr_sc /= numpy.sum(ctr_sc)
+    ctr_st = numpy.sum(pred, 0) / len(pred)
+    jsd = jensenshannon(ctr_st, ctr_sc)
+    pcc, _ = pearsonr(ctr_st, ctr_sc)
+    rmse = numpy.sqrt(numpy.mean((ctr_st - ctr_sc) ** 2))
+    return {
+        "JSD": jsd,
+        "PCC": pcc,
+        "RMSE": rmse
+    }
+
 def top_value(map_matrix, retain_percent = 0.1): 
     '''\
     Filter out cells with low mapping probability
@@ -109,4 +131,4 @@ def celltype_matrix(adata_sc):
         ctype = adata_sc.obs.loc[cell, label]
         mat.loc[cell, str(ctype)] = 1
     #res = mat.sum()
-    return mat 
+    return mat

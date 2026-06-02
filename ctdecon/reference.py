@@ -1,5 +1,5 @@
 import pandas
-from ._utils import top_value, celltype_matrix
+from ._utils import cal_eval, top_value, celltype_matrix
 
 def overlap_gene(adata, adata_sc):
     if 'highly_variable' not in adata.var.keys():
@@ -36,4 +36,6 @@ def cell2spot(adata, adata_sc, retain_percent=0.1):
     cell_type.sort()
     df_projection = pandas.DataFrame(matrix_projection, index=adata.obs_names, columns=cell_type)
     df_projection = df_projection.div(df_projection.sum(axis=1), axis=0).fillna(0)
+    evals = cal_eval(adata_sc, df_projection.values)
+    print("PCC {}, RMSE {}, JSD {}".format(evals["PCC"], evals["RMSE"], evals["JSD"]))
     adata.obs[df_projection.columns] = df_projection
